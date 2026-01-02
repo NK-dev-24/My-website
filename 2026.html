@@ -11,21 +11,17 @@
 
     <style>
         :root {
-            --bg-color: #e6e6e6; /* Industrial Grey */
+            --bg-color: #e6e6e6;
             --card-bg: #f4f4f4;
             --text-main: #111111;
             --text-dim: #666666;
-            --accent: #ff3300; /* Safety Orange */
+            --accent: #ff3300;
             --border: 1px solid #111;
             --font-ui: 'Inter', sans-serif;
             --font-data: 'Space Mono', monospace;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             background-color: var(--bg-color);
@@ -42,14 +38,11 @@
             width: 100%;
             background: var(--card-bg);
             border: var(--border);
-            box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.1);
         }
 
-        /* HEADER SECTION */
-        header {
-            padding: 2rem;
-            border-bottom: var(--border);
-        }
+        /* HEADER */
+        header { padding: 2rem; border-bottom: var(--border); }
 
         .nav {
             font-family: var(--font-data);
@@ -64,13 +57,10 @@
             color: var(--text-dim);
             text-decoration: none;
             border-bottom: 1px solid transparent;
-            transition: color 0.2s, border-color 0.2s;
+            transition: 0.2s;
         }
 
-        .nav a:hover {
-            color: var(--accent);
-            border-color: var(--accent);
-        }
+        .nav a:hover { color: var(--accent); border-color: var(--accent); }
 
         h1 {
             font-weight: 800;
@@ -87,120 +77,131 @@
         }
 
         /* GOAL LIST */
-        .goal-list {
-            list-style: none;
-        }
+        .goal-list { list-style: none; }
 
         .goal-item {
             display: flex;
             flex-direction: column;
             padding: 1.2rem 2rem;
-            border-bottom: 1px solid #ccc; /* Softer inner borders */
-            transition: background 0.2s;
+            border-bottom: 1px solid #ccc;
         }
+        .goal-item:last-child { border-bottom: none; }
 
-        .goal-item:last-child {
-            border-bottom: none;
-        }
+        /* CHECKBOX STYLES (LOCKED) */
+        .goal-top { display: flex; align-items: flex-start; gap: 1rem; }
 
-        .goal-item:hover {
-            background: #fff;
-        }
-
-        /* CHECKBOX ROW */
-        .goal-top {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-        }
-
-        /* Custom "Mechanical" Checkbox */
-        input[type="checkbox"] {
+        /* The "Real" Locked Checkbox */
+        input[type="checkbox"].locked {
             appearance: none;
-            -webkit-appearance: none;
             min-width: 20px;
             height: 20px;
-            border: 1.5px solid var(--text-main);
-            border-radius: 2px; /* Slight round for Dieter Rams feel */
+            border: 1.5px solid #888; /* Greyed out slightly */
+            background: #eee;
+            border-radius: 2px;
             display: grid;
             place-content: center;
-            cursor: pointer;
+            cursor: not-allowed; /* Shows it can't be clicked */
             margin-top: 2px;
         }
 
-        input[type="checkbox"]::before {
+        input[type="checkbox"].locked::before {
             content: "";
             width: 10px;
             height: 10px;
-            background: var(--accent);
+            background: var(--text-main);
             transform: scale(0);
-            transition: 0.2s transform cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-
-        input[type="checkbox"]:checked::before {
-            transform: scale(1);
-        }
-
-        input[type="checkbox"]:checked + .goal-text {
+        
+        /* If you manually add 'checked' in HTML, this shows it */
+        input[type="checkbox"].locked:checked::before { transform: scale(1); }
+        input[type="checkbox"].locked:checked { border-color: var(--text-main); }
+        input[type="checkbox"].locked:checked + .goal-text {
             text-decoration: line-through;
             color: var(--text-dim);
         }
 
-        .goal-text {
-            font-weight: 500;
-            font-size: 1rem;
-            transition: color 0.2s;
-        }
+        .goal-text { font-weight: 500; font-size: 1rem; }
 
-        /* DATA / PROGRESS SECTION */
         .goal-data {
             margin-top: 0.8rem;
-            margin-left: calc(20px + 1rem); /* Align with text */
+            margin-left: calc(20px + 1rem);
             font-family: var(--font-data);
             font-size: 0.75rem;
             color: var(--text-dim);
         }
 
+        /* PROGRESS BAR */
         .progress-bar {
             height: 4px;
             width: 100%;
             background: #ddd;
             margin-top: 6px;
-            position: relative;
-            overflow: hidden;
         }
-
-        /* Striped/Dotted "Nothing" Style Bar */
         .progress-fill {
             height: 100%;
-            background-color: var(--text-main);
+            background-color: var(--accent);
             background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
             background-size: 1rem 1rem;
         }
 
-        /* UTILITY CLASSES */
-        .tag {
-            display: inline-block;
-            background: #000;
-            color: #fff;
-            padding: 2px 6px;
+        /* PLAYABLE AREA */
+        .playground {
+            padding: 2rem;
+            background: #e1e1e1;
+            border-top: var(--border);
+            text-align: center;
+        }
+        .play-label {
+            font-family: var(--font-data);
             font-size: 0.6rem;
-            text-transform: uppercase;
-            margin-left: 8px;
-            vertical-align: middle;
-            border-radius: 2px;
+            letter-spacing: 0.1em;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+            display: block;
+        }
+        .fidget-strip {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
         }
         
+        /* The Fidget Switches */
+        .fidget-toggle {
+            appearance: none;
+            width: 30px;
+            height: 40px;
+            border: 1px solid var(--text-main);
+            background: #fff;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.1s;
+            border-radius: 2px;
+        }
+        .fidget-toggle:active { transform: scale(0.95); }
+        .fidget-toggle:checked {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+        .fidget-toggle::after {
+            content: "";
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 4px; height: 12px;
+            background: #ccc;
+        }
+        .fidget-toggle:checked::after { background: #fff; }
+
         /* FOOTER */
         .footer {
-            padding: 2rem;
-            border-top: var(--border);
+            padding: 1.5rem;
+            border-top: 1px solid #ccc;
             font-family: var(--font-data);
-            font-size: 0.7rem;
-            color: var(--text-dim);
-            text-align: right;
-            text-transform: uppercase;
+            font-size: 0.75rem;
+            text-align: center;
+            color: var(--text-main);
         }
+        .footer a { color: var(--text-main); text-decoration: none; border-bottom: 1px solid var(--text-main); }
 
     </style>
 </head>
@@ -209,83 +210,84 @@
     <div class="container">
         <header>
             <nav class="nav">
-                <a href="/">← Back Home</a>
-                <a href="#">Blog</a>
-                <a href="#">Collection</a>
+                <a href="https://naveenkumarv.com">← Back Home</a>
+                <a href="https://x.com/Naveen_KumarV2" target="_blank">X / Twitter</a>
+                <a href="https://www.linkedin.com/in/naveen-kumar-v-link/" target="_blank">LinkedIn</a>
             </nav>
             <h1>2026.</h1>
-            <p class="subtitle">PROJECT: LIFE_OPTIMIZATION // REV 01</p>
+            <p class="subtitle">TRACKING SYSTEM // VER 2.0</p>
         </header>
 
         <ul class="goal-list">
             
             <li class="goal-item">
                 <div class="goal-top">
-                    <input type="checkbox">
-                    <span class="goal-text">Launch at least 5 new products <span class="tag">PRIORITY</span></span>
+                    <input type="checkbox" class="locked" disabled> 
+                    <span class="goal-text">First register a company</span>
                 </div>
-                <div class="goal-data">STATUS: 0 / 5 DEPLOYED</div>
+                <div class="goal-data">STATUS: PENDING</div>
             </li>
 
             <li class="goal-item">
                 <div class="goal-top">
-                    <input type="checkbox">
-                    <span class="goal-text">Earn $100k (Passive)</span>
+                    <input type="checkbox" class="locked" disabled>
+                    <span class="goal-text">Make first hire</span>
+                </div>
+                <div class="goal-data">STATUS: PENDING</div>
+            </li>
+
+            <li class="goal-item">
+                <div class="goal-top">
+                    <input type="checkbox" class="locked" disabled>
+                    <span class="goal-text">Read 4 books</span>
+                </div>
+                <div class="goal-data">LIBRARY: 0 / 4</div>
+            </li>
+
+            <li class="goal-item">
+                <div class="goal-top">
+                    <input type="checkbox" class="locked" disabled>
+                    <span class="goal-text">Invest 50k INR</span>
                 </div>
                 <div class="goal-data">
-                    <span>CURRENT: $4,318.47 / $100,000</span>
+                    <span>ALLOCATED: 4.2k / 50k</span>
                     <div class="progress-bar">
-                        <div class="progress-fill" style="width: 4.3%;"></div>
+                        <div class="progress-fill" style="width: 8.4%;"></div>
                     </div>
                 </div>
             </li>
 
             <li class="goal-item">
                 <div class="goal-top">
-                    <input type="checkbox">
-                    <span class="goal-text">Invest $10k in stocks/crypto/assets</span>
+                    <input type="checkbox" class="locked" disabled>
+                    <span class="goal-text">Host a great dinner for my family</span>
                 </div>
-                <div class="goal-data">
-                    <span>ALLOCATED: $455 / $10,000</span>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 4.5%;"></div>
-                    </div>
-                </div>
-            </li>
-
-             <li class="goal-item">
-                <div class="goal-top">
-                    <input type="checkbox">
-                    <span class="goal-text">Travel to 3 new countries</span>
-                </div>
-                <div class="goal-data">LOGGED: 0 / 3</div>
-            </li>
-
-            <li class="goal-item">
-                <div class="goal-top">
-                    <input type="checkbox">
-                    <span class="goal-text">Hit gym 4 times a week</span>
-                </div>
-                <div class="goal-data">
-                    <span>SESSIONS: 0 / 200</span>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 0%;"></div>
-                    </div>
-                </div>
+                <div class="goal-data">STATUS: PENDING</div>
             </li>
             
              <li class="goal-item">
                 <div class="goal-top">
-                    <input type="checkbox">
-                    <span class="goal-text">Read at least 12 books</span>
+                    <input type="checkbox" class="locked" disabled>
+                    <span class="goal-text">Move to bigger city</span>
                 </div>
-                <div class="goal-data">LIBRARY: 0 / 12 READ</div>
+                <div class="goal-data">LOCATION: PENDING</div>
             </li>
 
         </ul>
 
+        <div class="playground">
+            <span class="play-label">FIDGET ZONE // CLICK SWITCHES</span>
+            <div class="fidget-strip">
+                <input type="checkbox" class="fidget-toggle">
+                <input type="checkbox" class="fidget-toggle">
+                <input type="checkbox" class="fidget-toggle">
+                <input type="checkbox" class="fidget-toggle">
+                <input type="checkbox" class="fidget-toggle">
+            </div>
+        </div>
+
         <div class="footer">
-            System Operational • Madurai, IN
+            by your <a href="https://www.linkedin.com/in/naveen-kumar-v-link/" target="_blank">landing page guy</a>
         </div>
     </div>
 
