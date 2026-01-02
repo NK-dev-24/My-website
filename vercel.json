@@ -1,0 +1,10 @@
+{
+    "cleanUrls": true,
+    "redirects": [
+      {
+        "source": "/",
+        "destination": "https://naveenkumarv.notion.site/Portfolio-Naveen-Kumar-V-28d5ddfc30548049bf0dedf365dcdd43?source=copy_link",
+        "permanent": false
+      }
+    ]
+  }
